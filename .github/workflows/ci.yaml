@@ -56,6 +56,6 @@ jobs:
           run_install: |
             - args: [--frozen-lockfile, --silent]
       - name: Test
-        uses: mattallty/jest-github-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          pnpm test
+          bash <(curl -s https://codecov.io/bash)
