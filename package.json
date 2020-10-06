@@ -1,7 +1,7 @@
 {
   "name": "nestjs-gate",
   "version": "0.0.0",
-  "description": "",
+  "description": "Authorization for NestJS",
   "main": "dist/gate.js",
   "module": "dist/gate.esm.js",
   "types": "dist/gate.d.ts",

@@ -2,8 +2,6 @@
   <img alt="NestJS Gate" src="https://raw.githubusercontent.com/znckco/nestjs-gate/master/.assets/cover.png"/>
 </p>
 
-<h1 align="center">NestJS Gate</h1>
-
 <p align="center">
 
 [![NPM](https://img.shields.io/npm/v/nestjs-gate)](https://www.npmjs.com/package/nestjs-gate)
@@ -14,7 +12,7 @@
 
 ## Description
 
-NestJS Gate is template repository to create new nestjs modules.
+Gate is an authorization module for NestJS.
 
 ## Installation
 
