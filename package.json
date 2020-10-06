@@ -1,0 +1,44 @@
+{
+  "name": "nestjs-gate",
+  "version": "0.0.0",
+  "description": "Authorization for Nestjs",
+  "main": "dist/gate.js",
+  "module": "dist/gate.esm.js",
+  "typings": "dist/gate.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "jest --coverage",
+    "build": "rollup -c"
+  },
+  "keywords": [
+    "nestjs",
+    "authorization",
+    "access control"
+  ],
+  "author": "Rahul Kadyan <hey@znck.me> (https://znck.me)",
+  "license": "MIT",
+  "devDependencies": {
+    "@nestjs/platform-express": "^7.4.4",
+    "@nestjs/testing": "^7.4.4",
+    "@rollup/plugin-typescript": "^6.0.0",
+    "@types/jest": "^26.0.14",
+    "@types/node": "^14.11.3",
+    "@types/supertest": "^2.0.10",
+    "jest": "^26.5.0",
+    "rollup": "^2.28.2",
+    "rollup-plugin-dts": "^1.4.13",
+    "supertest": "^5.0.0",
+    "ts-jest": "^26.4.1",
+    "tslib": "^2.0.1",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "@nestjs/common": "^7.4.4",
+    "@nestjs/core": "^7.4.4",
+    "cls-hooked": "^4.2.2",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.6.3"
+  }
+}
