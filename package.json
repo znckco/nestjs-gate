@@ -13,7 +13,7 @@
     "test": "jest --coverage",
     "build": "rollup -c --environment BUILD:production"
   },
-  "keywords": ["nestjs"],
+  "keywords": ["nestjs", "authorization", "access-control"],
   "author": "Rahul Kadyan <hey@znck.me> (https://znck.me)",
   "license": "MIT",
   "dependencies": {
@@ -29,6 +29,7 @@
     "@rollup/plugin-typescript": "^6.0.0",
     "@types/cls-hooked": "^4.3.1",
     "@types/node": "^14.11.4",
+    "@types/supertest": "^2.0.10",
     "@typescript-eslint/eslint-plugin": "^4.4.0",
     "@typescript-eslint/parser": "^4.4.0",
     "eslint": "^7.10.0",

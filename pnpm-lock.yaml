@@ -10,6 +10,7 @@ devDependencies:
   "@rollup/plugin-typescript": 6.0.0_cdbdda34bbbc534f7b00e9e97d2f15aa
   "@types/cls-hooked": 4.3.1
   "@types/node": 14.11.4
+  "@types/supertest": 2.0.10
   "@typescript-eslint/eslint-plugin": 4.4.0_a71b0516f86a95383173f79e74386c73
   "@typescript-eslint/parser": 4.4.0_eslint@7.10.0+typescript@4.0.3
   eslint: 7.10.0
@@ -713,6 +714,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-nMjNjQAk9vAYnDEXRUxGSACarjPDRKVaZ8xrwKzRy1BmzG5tN3JUkuvdVwE8P2GBkSRokxVw+QUpuvFzvOsKpA==
+  /@types/cookiejar/2.1.1:
+    dev: true
+    resolution:
+      integrity: sha512-aRnpPa7ysx3aNW60hTiCtLHlQaIFsXFCgQlpakNgDNVFzbtusSY8PwjAQgRWfSk0ekNoBjO51eQRB6upA9uuyw==
   /@types/estree/0.0.39:
     dev: true
     resolution:
@@ -777,6 +782,19 @@ packages:
     dev: true
     resolution:
       integrity: sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
+  /@types/superagent/4.1.10:
+    dependencies:
+      "@types/cookiejar": 2.1.1
+      "@types/node": 14.11.4
+    dev: true
+    resolution:
+      integrity: sha512-xAgkb2CMWUMCyVc/3+7iQfOEBE75NvuZeezvmixbUw3nmENf2tCnQkW5yQLTYqvXUQ+R6EXxdqKKbal2zM5V/g==
+  /@types/supertest/2.0.10:
+    dependencies:
+      "@types/superagent": 4.1.10
+    dev: true
+    resolution:
+      integrity: sha512-Xt8TbEyZTnD5Xulw95GLMOkmjGICrOQyJ2jqgkSjAUR3mm7pAIzSR0NFBaMcwlzVvlpCjNwbATcWWwjNiZiFrQ==
   /@types/yargs-parser/15.0.0:
     dev: true
     resolution:
@@ -6155,6 +6173,7 @@ specifiers:
   "@rollup/plugin-typescript": ^6.0.0
   "@types/cls-hooked": ^4.3.1
   "@types/node": ^14.11.4
+  "@types/supertest": ^2.0.10
   "@typescript-eslint/eslint-plugin": ^4.4.0
   "@typescript-eslint/parser": ^4.4.0
   cls-hooked: ^4.2.2
