@@ -2,6 +2,6 @@
 name: Question
 about: Ask a question
 title: "[QUES]"
-labels: ""
+labels: "question"
 assignees: ""
 ---
