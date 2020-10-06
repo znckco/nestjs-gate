@@ -17,7 +17,7 @@ class EntityPolicy {
     return true
   }
 
-  create(user) {
+  create(user: unknown) {
     return user != null
   }
 }

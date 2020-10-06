@@ -71,14 +71,14 @@ export class GateService implements AbstractGateService {
 
   private async getPolicyChecker(
     permission: string,
-    resource: object | Type<object>,
+    resource?: object | Type<object>,
   ): Promise<(...args: any[]) => Promise<boolean>> {
     const policy = await this.getPolicy(resource)
-    const method = this.getMethodName(permission)
+    const method = this.getMethodName(permission) as keyof typeof policy
     const fn = policy[method]
 
     if (typeof fn === "function") {
-      return fn.bind(policy)
+      return fn.bind(policy) as any
     }
 
     throw new UnknownPermissionException({ resource, permission })
@@ -96,10 +96,10 @@ export class GateService implements AbstractGateService {
   }
 
   private async getPolicy(
-    resource: object | Type<object>,
+    resource?: object | Type<object>,
   ): Promise<AbstractPolicy<unknown, unknown>> {
     if (resource == null) {
-      if (this.options.UserPolicy) {
+      if (this.options?.UserPolicy) {
         const policy = await this.moduleRef.create(this.options.UserPolicy)
         if (policy != null) return policy
       } else if (this.options?.User) {

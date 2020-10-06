@@ -32,7 +32,7 @@ export class GateInterceptor implements NestInterceptor {
 
     this.namespace.enter(scope)
     if (this.options) {
-      this.namespace.set(GATE_USER_KEY, () => this.options.getUser(context))
+      this.namespace.set(GATE_USER_KEY, () => this.options!.getUser(context))
     } else {
       const request = context.switchToHttp()?.getRequest()
       this.namespace.set(GATE_USER_KEY, () => request?.user)
