@@ -4,13 +4,14 @@ import {
   ExecutionContext,
   ForbiddenException,
   Get,
+  Module,
 } from "@nestjs/common"
 import { APP_INTERCEPTOR } from "@nestjs/core"
 import { Test } from "@nestjs/testing"
 import request from "supertest"
-import { Policy } from "./decorators/Policy"
-import { Gate } from "./facades/Gate"
-import { GateModule } from "./GateModule"
+import { Gate, GateModule, Policy, createPolicyDecorator } from "./index"
+
+const CustomPolicy = createPolicyDecorator()
 
 class EntityPolicy {
   search() {
@@ -24,6 +25,9 @@ class EntityPolicy {
 
 @Policy(EntityPolicy)
 class Entity {}
+
+@CustomPolicy(EntityPolicy)
+class EntityB {}
 
 @Controller()
 class TestController {
@@ -55,6 +59,18 @@ class TestController {
   }
 }
 
+@Module({ imports: [GateModule] })
+class TestApp {}
+
+@Module({
+  imports: [
+    GateModule.forRoot({
+      getUser: (context) => context.switchToHttp().getRequest()?.user,
+    }),
+  ],
+})
+class TestApp2 {}
+
 class AuthProvider {
   constructor(private user?: unknown) {}
 
@@ -70,7 +86,7 @@ class AuthProvider {
 describe("GateModule", () => {
   async function createApp(user?: unknown) {
     const moduleRef = await Test.createTestingModule({
-      imports: [GateModule],
+      imports: [TestApp],
       providers: [
         EntityPolicy,
         { provide: APP_INTERCEPTOR, useValue: new AuthProvider(user) },

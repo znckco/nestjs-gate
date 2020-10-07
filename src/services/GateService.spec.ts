@@ -1,3 +1,4 @@
+import { Type } from "@nestjs/common"
 import { ModuleRef, Reflector } from "@nestjs/core"
 import { Namespace } from "cls-hooked"
 import { Policy } from "../decorators/Policy"
@@ -22,7 +23,7 @@ describe("GateService", () => {
 
   beforeEach(() => {
     moduleRef = {
-      create: (T: any) => (T === EntityPolicy ? new EntityPolicy() : undefined),
+      create: (T: Type<any>) => (typeof T === "function" ? new T() : null),
     } as any
     namespace = { get: () => undefined } as any
 
@@ -34,6 +35,9 @@ describe("GateService", () => {
   })
 
   it("should throw when policy is not registered", async () => {
+    await expect(service.allows("search")).rejects.toThrow(
+      MissingPolicyException,
+    )
     await expect(service.allows("search", EntityB)).rejects.toThrow(
       MissingPolicyException,
     )
@@ -112,5 +116,48 @@ describe("GateService", () => {
     await expect(service.allows("searchUser", resource)).resolves.toBe(true)
 
     expect(policy.searchUser).toHaveBeenCalledTimes(2)
+  })
+
+  it("should assume user resource when resource is null and User has policy", async () => {
+    const user = { id: 1 }
+    const spy = jest.fn()
+    class UserPolicy {
+      search(user: any) {
+        spy(user)
+        return true
+      }
+    }
+    @Policy(UserPolicy)
+    class User {}
+    const options = {
+      getUser: () => user,
+      User,
+    }
+    namespace.get = () => options.getUser
+    const service = new GateService(reflector, moduleRef, namespace, options)
+
+    await expect(service.allows("search")).resolves.toBe(true)
+
+    expect(spy).toHaveBeenCalledWith(user)
+  })
+  it("should assume user resource when resource is null", async () => {
+    const user = { id: 1 }
+    const spy = jest.fn()
+    class UserPolicy {
+      search(user: any) {
+        spy(user)
+        return true
+      }
+    }
+    const options = {
+      getUser: () => user,
+      UserPolicy,
+    }
+    namespace.get = () => options.getUser
+    const service = new GateService(reflector, moduleRef, namespace, options)
+
+    await expect(service.allows("search")).resolves.toBe(true)
+
+    expect(spy).toHaveBeenCalledWith(user)
   })
 })

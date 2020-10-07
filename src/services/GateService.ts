@@ -47,7 +47,7 @@ export class GateService implements AbstractGateService {
       case 2: {
         const user = await this.getUser()
 
-        return true === (await check(user, resource ?? user))
+        return true === (await check(user, resource))
       }
       case 1:
         return true === (await check(await this.getUser()))
@@ -101,9 +101,10 @@ export class GateService implements AbstractGateService {
     if (resource == null) {
       if (this.options?.UserPolicy) {
         const policy = await this.moduleRef.create(this.options.UserPolicy)
+        // istanbul ignore else
         if (policy != null) return policy
       } else if (this.options?.User) {
-        resource = this.options?.User
+        resource = this.options.User
       }
     }
 
@@ -115,10 +116,7 @@ export class GateService implements AbstractGateService {
           : Reflect.getPrototypeOf(resource).constructor,
       )
 
-      const policy =
-        typeof Policy === "object"
-          ? Policy
-          : await this.moduleRef.create(Policy)
+      const policy = await this.moduleRef.create(Policy)
 
       if (policy != null) return policy
     }

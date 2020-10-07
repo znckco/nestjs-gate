@@ -24,13 +24,44 @@ $ npm install --save nestjs-gate
 ## Quick Start
 
 ```ts
-import { GateModule, Gate } from "nestjs-gate"
+import { GateModule, Gate, Policy } from "nestjs-gate"
+import { Module, Injectable } from "@nestjs/common"
+import { NestFactory } from "@nestjs/core"
 
-@Module({ imports: [GateModule] })
+// 1. Create policy
+@Injectable()
+class ResourcePolicy {
+  update(user: any, resource: Resource) {
+    return true // Check if "user" can update "resource"
+  }
+}
+
+// 2. Register policy
+@Policy(ResourcePolicy)
+class Resource {}
+
+// 3. Use Gate for authorization
+@Injectable()
+class ExampleService {
+  async update(resource: Resource) {
+    if (await Gate.allows("update", resource)) {
+      // Yes, update is allowed.
+    } else {
+      // No, throw forbidden error.
+    }
+  }
+}
+
+// 4. Import GateModule and provide your polices.
+@Module({ imports: [GateModule], providers: [ResourcePolicy, ExampleService] })
 class AppModule {}
 
-// TODO: Add docs.
-Gate.allows("ability", resource)
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule)
+  await app.listen(3000)
+}
+
+bootstrap()
 ```
 
 ## Stay in touch

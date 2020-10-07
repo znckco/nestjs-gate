@@ -29,6 +29,7 @@ devDependencies:
   prettier: 2.1.2
   rollup: 2.28.2
   rollup-plugin-dts: 1.4.13_rollup@2.28.2+typescript@4.0.3
+  rollup-plugin-typescript-paths: 1.2.2_typescript@4.0.3
   supertest: 5.0.0
   ts-jest: 26.4.1_jest@26.5.0+typescript@4.0.3
   tslib: 2.0.1
@@ -5064,6 +5065,14 @@ packages:
       typescript: ^4.0.2
     resolution:
       integrity: sha512-7mxoQ6PcmCkBE5ZhrjGDL4k42XLy8BkSqpiRi1MipwiGs+7lwi4mQkp2afX+OzzLjJp/TGM8llfe8uayIUhPEw==
+  /rollup-plugin-typescript-paths/1.2.2_typescript@4.0.3:
+    dependencies:
+      typescript: 4.0.3
+    dev: true
+    peerDependencies:
+      typescript: ">=3.x"
+    resolution:
+      integrity: sha512-MMdnzx4Qbj3kZnPivNTlfnCYTvFKvl2Ac+tlVyq3EUK90mmaY5wCz6oEofxwUAF0YTwp8jI5AsasqJmDUwhDXQ==
   /rollup/2.28.2:
     dev: true
     engines:
@@ -6194,6 +6203,7 @@ specifiers:
   reflect-metadata: ^0.1.13
   rollup: ^2.28.2
   rollup-plugin-dts: ^1.4.13
+  rollup-plugin-typescript-paths: ^1.2.2
   rxjs: ^6.6.3
   supertest: ^5.0.0
   ts-jest: ^26.4.1
