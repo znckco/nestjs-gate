@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import {
   CallHandler,
   Controller,
@@ -9,7 +11,7 @@ import {
 import { APP_INTERCEPTOR } from "@nestjs/core"
 import { Test } from "@nestjs/testing"
 import request from "supertest"
-import { Gate, GateModule, Policy, createPolicyDecorator } from "./index"
+import { createPolicyDecorator, Gate, GateModule, Policy } from "./index"
 
 const CustomPolicy = createPolicyDecorator()
 
@@ -18,7 +20,7 @@ class EntityPolicy {
     return true
   }
 
-  create(user: unknown) {
+  create(user: any) {
     return user != null
   }
 }
@@ -72,7 +74,7 @@ class TestApp {}
 class TestApp2 {}
 
 class AuthProvider {
-  constructor(private user?: unknown) {}
+  constructor(private user?: any) {}
 
   async intercept(context: ExecutionContext, next: CallHandler) {
     const http = context.switchToHttp()
@@ -84,7 +86,7 @@ class AuthProvider {
 }
 
 describe("GateModule", () => {
-  async function createApp(user?: unknown) {
+  async function createApp(user?: any) {
     const moduleRef = await Test.createTestingModule({
       imports: [TestApp],
       providers: [

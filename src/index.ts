@@ -1,6 +1,9 @@
 export { createPolicyDecorator, Policy } from "./decorators/Policy"
+export { can } from "./decorators/can"
+export { cannot } from "./decorators/cannot"
 export { Gate } from "./facades/Gate"
 export { GateModule } from "./GateModule"
+export { GateOptions } from "./interfaces/GateOptions"
 export { AbstractPolicy } from "./interfaces/AbstractPolicy"
 
 export * from "./exceptions/MissingPolicyException"

@@ -25,7 +25,7 @@ $ npm install --save nestjs-gate
 
 ```ts
 import { GateModule, Gate, Policy } from "nestjs-gate"
-import { Module, Injectable } from "@nestjs/common"
+import { Module, Injectable, Controller } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
 
 // 1. Create policy
@@ -49,6 +49,15 @@ class ExampleService {
     } else {
       // No, throw forbidden error.
     }
+  }
+}
+
+// 3. Use Gate with pipe transform
+@Controller()
+class ExampleController {
+  @Post("/update")
+  async update(@Param("id", /* id -> resource */ , can("update")) resource: Resource) {
+      // Yes, update is allowed.
   }
 }
 

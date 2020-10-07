@@ -21,20 +21,21 @@ export class GateInterceptor implements NestInterceptor {
     @Inject(GATE_NAMESPACE_PROVIDER)
     private readonly namespace: Namespace,
     @Inject(GATE_OPTIONS_PROVIDER)
-    private readonly options?: GateOptions<unknown>,
+    private readonly options?: GateOptions,
   ) {}
 
   async intercept(
     context: ExecutionContext,
     next: CallHandler,
-  ): Promise<Observable<unknown>> {
+  ): Promise<Observable<any>> {
     const scope = this.namespace.createContext()
 
     this.namespace.enter(scope)
-    if (this.options) {
-      this.namespace.set(GATE_USER_KEY, () => this.options!.getUser(context))
+    if (this.options != null) {
+      const options = this.options
+      this.namespace.set(GATE_USER_KEY, () => options.getUser(context))
     } else {
-      const request = context.switchToHttp()?.getRequest()
+      const request = context.switchToHttp().getRequest<any | null>()
       this.namespace.set(GATE_USER_KEY, () => request?.user)
     }
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Type } from "@nestjs/common"
 import { ModuleRef, Reflector } from "@nestjs/core"
 import { Namespace } from "cls-hooked"
@@ -144,7 +145,7 @@ describe("GateService", () => {
     const user = { id: 1 }
     const spy = jest.fn()
     class UserPolicy {
-      search(user: any) {
+      any(user: any) {
         spy(user)
         return true
       }
@@ -156,7 +157,7 @@ describe("GateService", () => {
     namespace.get = () => options.getUser
     const service = new GateService(reflector, moduleRef, namespace, options)
 
-    await expect(service.allows("search")).resolves.toBe(true)
+    await expect(service.allows("any")).resolves.toBe(true)
 
     expect(spy).toHaveBeenCalledWith(user)
   })

@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-extraneous-class */
 import type { DynamicModule } from "@nestjs/common"
-
 import { Module } from "@nestjs/common"
 import { APP_INTERCEPTOR } from "@nestjs/core"
 import { createNamespace } from "cls-hooked"
@@ -21,7 +21,9 @@ class DynamicGateModule {}
   exports: [GateService],
 })
 export class GateModule {
-  static forRoot<T>(options: GateOptions<T>): DynamicModule {
+  static forRoot<User, UserPolicy>(
+    options: GateOptions<User, UserPolicy>,
+  ): DynamicModule {
     return {
       module: DynamicGateModule,
       providers: [

@@ -63,7 +63,7 @@ describe("GateInterceptor", () => {
     await observable.toPromise()
     expect(namespace.enter).toHaveBeenCalledTimes(1)
     expect(namespace.exit).toHaveBeenCalledTimes(1)
-    
+
     expect(namespace.createContext).toHaveBeenCalledTimes(1)
     expect(namespace.set).toHaveBeenCalledTimes(1)
   })
@@ -76,7 +76,7 @@ describe("GateInterceptor", () => {
       set: jest.fn(),
       createContext: jest.fn(),
     } as any
-    const context = { switchToHttp: jest.fn() } as any
+    const context = { switchToHttp: () => ({ getRequest: () => null }) } as any
     const interceptor = new GateInterceptor(namespace)
 
     const observable = await interceptor.intercept(context, {

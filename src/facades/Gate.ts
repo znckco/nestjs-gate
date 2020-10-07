@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-extraneous-class */
 import type { Type } from "@nestjs/common"
 import type { AbstractGateService } from "../interfaces/AbstractGateService"
 
@@ -7,7 +8,7 @@ export class Gate {
   /**
    * @internal
    */
-  static async _useService(service: AbstractGateService) {
+  static _useService(service: AbstractGateService): void {
     this.service = service
   }
 
@@ -15,13 +16,13 @@ export class Gate {
     permission: string,
     resource: object | Type<object>,
   ): Promise<boolean> {
-    return this.service.allows(permission, resource)
+    return await this.service.allows(permission, resource)
   }
 
   static async denies(
     permission: string,
     resource: object | Type<object>,
   ): Promise<boolean> {
-    return this.service.denies(permission, resource)
+    return await this.service.denies(permission, resource)
   }
 }

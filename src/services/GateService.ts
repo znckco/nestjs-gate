@@ -1,8 +1,13 @@
-import type { Namespace } from "cls-hooked"
 import type { Type } from "@nestjs/common"
-
 import { Inject, Injectable } from "@nestjs/common"
-import { Reflector, ModuleRef } from "@nestjs/core"
+import { ModuleRef, Reflector } from "@nestjs/core"
+import type { Namespace } from "cls-hooked"
+import {
+  GATE_NAMESPACE_PROVIDER,
+  GATE_OPTIONS_PROVIDER,
+  GATE_USER_KEY,
+  POLICY_KEY,
+} from "../constants"
 import { MissingPolicyException } from "../exceptions/MissingPolicyException"
 import { UnknownPermissionException } from "../exceptions/UnknownPermissionException"
 import { UnsupportedCheckException } from "../exceptions/UnsupportedCheckException"
@@ -10,12 +15,6 @@ import { Gate } from "../facades/Gate"
 import { AbstractGateService } from "../interfaces/AbstractGateService"
 import { AbstractPolicy } from "../interfaces/AbstractPolicy"
 import { GateOptions } from "../interfaces/GateOptions"
-import {
-  GATE_NAMESPACE_PROVIDER,
-  GATE_OPTIONS_PROVIDER,
-  GATE_USER_KEY,
-  POLICY_KEY,
-} from "../constants"
 
 @Injectable()
 export class GateService implements AbstractGateService {
@@ -25,7 +24,7 @@ export class GateService implements AbstractGateService {
     @Inject(GATE_NAMESPACE_PROVIDER)
     private readonly namespace: Namespace,
     @Inject(GATE_OPTIONS_PROVIDER)
-    private readonly options?: GateOptions<unknown>,
+    private readonly options?: GateOptions,
   ) {
     Gate._useService(this)
   }
@@ -34,7 +33,9 @@ export class GateService implements AbstractGateService {
     permission: string,
     resource?: object | Type<object>,
   ): Promise<boolean> {
-    return false === (await this.allows(permission, resource))
+    const result = await this.allows(permission, resource)
+
+    return !result
   }
 
   async allows(
@@ -46,24 +47,24 @@ export class GateService implements AbstractGateService {
     switch (check.length) {
       case 2: {
         const user = await this.getUser()
-
-        return true === (await check(user, resource))
+        const result = await check(user, resource)
+        return result
       }
-      case 1:
-        return true === (await check(await this.getUser()))
-      case 0:
-        return true === (await check())
+      case 1: {
+        const result = await check(await this.getUser())
+        return result
+      }
+      case 0: {
+        const result = await check()
+        return result
+      }
 
       default:
-        throw new UnsupportedCheckException({
-          resource,
-          check,
-          message: `Check function should accept at max 2 arguments, ${check.name} accepts ${check.length}`,
-        })
+        throw new UnsupportedCheckException()
     }
   }
 
-  private async getUser(): Promise<unknown> {
+  private async getUser(): Promise<any> {
     const fn = this.namespace.get(GATE_USER_KEY)
 
     return typeof fn === "function" ? (await fn()) ?? null : null
@@ -81,7 +82,7 @@ export class GateService implements AbstractGateService {
       return fn.bind(policy) as any
     }
 
-    throw new UnknownPermissionException({ resource, permission })
+    throw new UnknownPermissionException()
   }
 
   // TODO: Memoize this function.
@@ -99,11 +100,11 @@ export class GateService implements AbstractGateService {
     resource?: object | Type<object>,
   ): Promise<AbstractPolicy<unknown, unknown>> {
     if (resource == null) {
-      if (this.options?.UserPolicy) {
+      if (this.options?.UserPolicy != null) {
         const policy = await this.moduleRef.create(this.options.UserPolicy)
         // istanbul ignore else
         if (policy != null) return policy
-      } else if (this.options?.User) {
+      } else if (this.options?.User != null) {
         resource = this.options.User
       }
     }
@@ -121,6 +122,6 @@ export class GateService implements AbstractGateService {
       if (policy != null) return policy
     }
 
-    throw new MissingPolicyException({ resource })
+    throw new MissingPolicyException()
   }
 }
