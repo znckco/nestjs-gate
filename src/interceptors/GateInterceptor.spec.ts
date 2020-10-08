@@ -73,7 +73,9 @@ describe("GateInterceptor", () => {
       enter: jest.fn(),
       exit: jest.fn(),
       get: jest.fn(),
-      set: jest.fn(),
+      set: jest.fn().mockImplementation((_, fn) => {
+        expect(fn()).toBe(undefined)
+      }),
       createContext: jest.fn(),
     } as any
     const context = { switchToHttp: () => ({ getRequest: () => null }) } as any

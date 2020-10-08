@@ -24,7 +24,7 @@ describe("GateService", () => {
 
   beforeEach(() => {
     moduleRef = {
-      create: (T: Type<any>) => (typeof T === "function" ? new T() : null),
+      get: (T: Type<any>) => (typeof T === "function" ? new T() : null),
     } as any
     namespace = { get: () => undefined } as any
 
@@ -62,7 +62,7 @@ describe("GateService", () => {
       }),
     }
 
-    jest.spyOn(moduleRef, "create").mockImplementation(async () => policy)
+    jest.spyOn(moduleRef, "get").mockImplementation(async () => policy)
 
     await expect(service.allows("search", EntityA)).rejects.toThrowError(error)
   })
@@ -73,7 +73,7 @@ describe("GateService", () => {
       view: jest.fn((user, entity) => false),
       custom: jest.fn((user, entity, other) => false),
     }
-    jest.spyOn(moduleRef, "create").mockImplementation(async () => policy)
+    jest.spyOn(moduleRef, "get").mockImplementation(async () => policy)
     const entity = new EntityA()
 
     await service.allows("search", entity)
@@ -95,7 +95,7 @@ describe("GateService", () => {
   })
   it("should consistently work with allows and denies", async () => {
     const policy = { search: jest.fn(() => true) }
-    jest.spyOn(moduleRef, "create").mockImplementation(async () => policy)
+    jest.spyOn(moduleRef, "get").mockImplementation(async () => policy)
     const resource = new EntityA()
 
     await expect(service.allows("search", resource)).resolves.toBe(true)
@@ -103,14 +103,14 @@ describe("GateService", () => {
   })
   it("should resolve promises in check", async () => {
     const policy = { search: jest.fn(() => Promise.resolve(false)) }
-    jest.spyOn(moduleRef, "create").mockImplementation(async () => policy)
+    jest.spyOn(moduleRef, "get").mockImplementation(async () => policy)
     const resource = new EntityA()
 
     await expect(service.allows("search", resource)).resolves.toBe(false)
   })
   it("should normalize check names", async () => {
     const policy = { searchUser: jest.fn(() => Promise.resolve(true)) }
-    jest.spyOn(moduleRef, "create").mockImplementation(async () => policy)
+    jest.spyOn(moduleRef, "get").mockImplementation(async () => policy)
     const resource = new EntityA()
 
     await expect(service.allows("search:user", resource)).resolves.toBe(true)

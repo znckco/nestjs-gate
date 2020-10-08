@@ -101,7 +101,9 @@ export class GateService implements AbstractGateService {
   ): Promise<AbstractPolicy<unknown, unknown>> {
     if (resource == null) {
       if (this.options?.UserPolicy != null) {
-        const policy = await this.moduleRef.create(this.options.UserPolicy)
+        const policy = await this.moduleRef.get(this.options.UserPolicy, {
+          strict: false,
+        })
         // istanbul ignore else
         if (policy != null) return policy
       } else if (this.options?.User != null) {
@@ -117,7 +119,7 @@ export class GateService implements AbstractGateService {
           : Reflect.getPrototypeOf(resource).constructor,
       )
 
-      const policy = await this.moduleRef.create(Policy)
+      const policy = await this.moduleRef.get(Policy, { strict: false })
 
       if (policy != null) return policy
     }
