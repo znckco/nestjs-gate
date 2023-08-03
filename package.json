@@ -18,7 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "@nestjs/common": "^7.4.4",
-    "@nestjs/core": "^7.4.4",
+    "@nestjs/core": "^9.0.5",
     "cls-hooked": "^4.2.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.6.3"
